@@ -1,322 +1,710 @@
-import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import {
-  ArrowLeft, ExternalLink, Github, Code2, Star,
-  ChevronRight, Layers, Layout, Globe, Package, Cpu, Code,
-} from "lucide-react";
-import Swal from 'sweetalert2';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { projects } from '../data/projects';
+import { motion } from 'framer-motion';
+import { ArrowLeft, ExternalLink, Star, Layers, Layout, Globe, Package, Cpu, Code, Info, AlertCircle, Award, PenTool, Code2, ArrowUp, UserCheck } from 'lucide-react';
+import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
 
 const TECH_ICONS = {
-  React: Globe,
-  Tailwind: Layout,
-  Express: Cpu,
-  Python: Code,
-  Javascript: Code,
+  Figma: Globe,
+  'React Native': Code2,
+  'UX Research': Info,
+  'Adobe Illustrator': PenTool,
+  'Adobe Photoshop': Layers,
+  'Material Design': Layout,
+  'Human Interface Guidelines': Info,
+  iOS: Package,
+  Android: Cpu,
   HTML: Code,
   CSS: Code,
   default: Package,
 };
 
 const TechBadge = ({ tech }) => {
-  const Icon = TECH_ICONS[tech] || TECH_ICONS["default"];
-  
+  const Icon = TECH_ICONS[tech] || TECH_ICONS.default;
   return (
-    <div className="group relative overflow-hidden px-3 py-2 md:px-4 md:py-2.5 bg-gradient-to-r from-blue-600/10 to-purple-600/10 rounded-xl border border-blue-500/10 hover:border-blue-500/30 transition-all duration-300 cursor-default">
+    <motion.div
+      whileHover={{ scale: 1.05 }}
+      className="group relative overflow-hidden px-3 py-2 bg-gradient-to-r from-blue-600/10 to-purple-600/10 rounded-xl border border-blue-500/10 hover:border-blue-500/30 transition-all duration-300 cursor-default"
+    >
       <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 to-purple-500/0 group-hover:from-blue-500/10 group-hover:to-purple-500/10 transition-all duration-500" />
-      <div className="relative flex items-center gap-1.5 md:gap-2">
-        <Icon className="w-3.5 h-3.5 md:w-4 md:h-4 text-blue-400 group-hover:text-blue-300 transition-colors" />
-        <span className="text-xs md:text-sm font-medium text-blue-300/90 group-hover:text-blue-200 transition-colors">
+      <div className="relative flex items-center gap-2">
+        <Icon className="w-4 h-4 text-blue-400 group-hover:text-blue-300 transition-colors" />
+        <span className="text-sm font-medium text-blue-300/90 group-hover:text-blue-200 transition-colors">
           {tech}
         </span>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
-const FeatureItem = ({ feature }) => {
-  return (
-    <li className="group flex items-start space-x-3 p-2.5 md:p-3.5 rounded-xl hover:bg-white/5 transition-all duration-300 border border-transparent hover:border-white/10">
-      <div className="relative mt-2">
-        <div className="absolute -inset-1 bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-full blur group-hover:opacity-100 opacity-0 transition-opacity duration-300" />
-        <div className="relative w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-gradient-to-r from-blue-400 to-purple-400 group-hover:scale-125 transition-transform duration-300" />
-      </div>
-      <span className="text-sm md:text-base text-gray-300 group-hover:text-white transition-colors">
-        {feature}
-      </span>
-    </li>
-  );
+TechBadge.propTypes = {
+  tech: PropTypes.string.isRequired,
 };
 
-const ProjectStats = ({ project }) => {
-  const techStackCount = project?.TechStack?.length || 0;
-  const featuresCount = project?.Features?.length || 0;
-
-  return (
-    <div className="grid grid-cols-2 gap-3 md:gap-4 p-3 md:p-4 bg-[#0a0a1a] rounded-xl overflow-hidden relative">
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 to-purple-900/20 opacity-50 blur-2xl z-0" />
-
-      <div className="relative z-10 flex items-center space-x-2 md:space-x-3 bg-white/5 p-2 md:p-3 rounded-lg border border-blue-500/20 transition-all duration-300 hover:scale-105 hover:border-blue-500/50 hover:shadow-lg">
-        <div className="bg-blue-500/20 p-1.5 md:p-2 rounded-full">
-          <Code2 className="text-blue-300 w-4 h-4 md:w-6 md:h-6" strokeWidth={1.5} />
-        </div>
-        <div className="flex-grow">
-          <div className="text-lg md:text-xl font-semibold text-blue-200">{techStackCount}</div>
-          <div className="text-[10px] md:text-xs text-gray-400">Total Teknologi</div>
-        </div>
-      </div>
-
-      <div className="relative z-10 flex items-center space-x-2 md:space-x-3 bg-white/5 p-2 md:p-3 rounded-lg border border-purple-500/20 transition-all duration-300 hover:scale-105 hover:border-purple-500/50 hover:shadow-lg">
-        <div className="bg-purple-500/20 p-1.5 md:p-2 rounded-full">
-          <Layers className="text-purple-300 w-4 h-4 md:w-6 md:h-6" strokeWidth={1.5} />
-        </div>
-        <div className="flex-grow">
-          <div className="text-lg md:text-xl font-semibold text-purple-200">{featuresCount}</div>
-          <div className="text-[10px] md:text-xs text-gray-400">Fitur Utama</div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const handleGithubClick = (githubLink) => {
-  if (githubLink === 'Private') {
-    Swal.fire({
-      icon: 'info',
-      title: 'Source Code Private',
-      text: 'Maaf, source code untuk proyek ini bersifat privat.',
-      confirmButtonText: 'Mengerti',
-      confirmButtonColor: '#3085d6',
-      background: '#030014',
-      color: '#ffffff'
-    });
-    return false;
-  }
-  return true;
-};
-
-const ProjectDetails = () => {
+const ProjectDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [project, setProject] = useState(null);
-  const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const project = projects.find(p => p.id === parseInt(id));
+  const [showScrollTop, setShowScrollTop] = useState(false);
 
+  // Scroll to top when component mounts
   useEffect(() => {
     window.scrollTo(0, 0);
-    const storedProjects = JSON.parse(localStorage.getItem("projects")) || [];
-    const selectedProject = storedProjects.find((p) => String(p.id) === id);
-    
-    if (selectedProject) {
-      const enhancedProject = {
-        ...selectedProject,
-        Features: selectedProject.Features || [],
-        TechStack: selectedProject.TechStack || [],
-        Github: selectedProject.Github || 'https://github.com/EkiZR',
-      };
-      setProject(enhancedProject);
-    }
-  }, [id]);
+  }, []);
+
+  // Handle scroll visibility
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 300);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
+  const handleNavigation = (section) => {
+    navigate('/');
+    setTimeout(() => {
+      const targetSection = document.getElementById(section);
+      if (targetSection) {
+        targetSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
+  };
 
   if (!project) {
-    return (
-      <div className="min-h-screen bg-[#030014] flex items-center justify-center">
-        <div className="text-center space-y-6 animate-fadeIn">
-          <div className="w-16 h-16 md:w-24 md:h-24 mx-auto border-4 border-blue-500/30 border-t-blue-500 rounded-full animate-spin" />
-          <h2 className="text-xl md:text-3xl font-bold text-white">Loading Project...</h2>
-        </div>
-      </div>
-    );
+    return <div>Project not found</div>;
   }
 
   return (
-    <div className="min-h-screen bg-[#030014] px-[2%] sm:px-0 relative overflow-hidden">
-      {/* Background animations remain unchanged */}
-      <div className="fixed inset-0">
-        <div className="absolute -inset-[10px] opacity-20">
-          <div className="absolute top-0 -left-4 w-72 md:w-96 h-72 md:h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob" />
-          <div className="absolute top-0 -right-4 w-72 md:w-96 h-72 md:h-96 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000" />
-          <div className="absolute -bottom-8 left-20 w-72 md:w-96 h-72 md:h-96 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-4000" />
-        </div>
-        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.02]" />
+    <div className="min-h-screen bg-[#030014] text-white pt-20 px-4 md:px-8">
+      {/* Scroll to top button */}
+      <motion.button
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: showScrollTop ? 1 : 0, y: showScrollTop ? 0 : 20 }}
+        transition={{ duration: 0.3 }}
+        onClick={scrollToTop}
+        className="fixed bottom-8 right-8 z-50 p-3 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 group"
+      >
+        <ArrowUp className="w-6 h-6 text-white group-hover:-translate-y-1 transition-transform" />
+      </motion.button>
+
+      <div className="max-w-7xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="mb-8"
+        >
+          <Link 
+            to="/" 
+            onClick={() => handleNavigation('portfolio')}
+            className="relative inline-flex items-center justify-center px-6 py-2 overflow-hidden font-medium transition duration-300 ease-out border-2 border-purple-500 rounded-lg shadow-md group"
+          >
+            <span className="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-gradient-to-r from-purple-500 to-blue-500 group-hover:translate-x-0 ease">
+              <ArrowLeft className="w-5 h-5 mr-2" />
+              Back
+            </span>
+            <span className="absolute flex items-center justify-center w-full h-full text-purple-500 transition-all duration-300 transform group-hover:translate-x-full ease">
+              <ArrowLeft className="w-5 h-5 mr-2" />
+              Back
+            </span>
+            <span className="relative invisible">Back</span>
+          </Link>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="mb-16 pt-8"
+        >
+          <h1 className="text-4xl md:text-5xl font-bold mb-8 pb-4 bg-gradient-to-r from-purple-400 to-blue-500 text-transparent bg-clip-text">
+            {project.title}
+          </h1>
+          <p className="text-gray-300 text-lg">{project.description}</p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="mb-12"
+        >
+          <div className="relative w-full max-w-xl mx-auto">
+            {/* Glowing frame container */}
+            <div className="absolute inset-0">
+              <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg blur opacity-30 group-hover:opacity-50 transition duration-500"></div>
+              <motion.div
+                className="absolute inset-0 rounded-lg opacity-30"
+                style={{
+                  background: "linear-gradient(45deg, #6366f1, #a855f7, #6366f1)",
+                  backgroundSize: "200% 200%",
+                }}
+                animate={{
+                  backgroundPosition: ["0% 0%", "100% 100%"],
+                }}
+                transition={{
+                  duration: 5,
+                  repeat: Infinity,
+                  repeatType: "reverse",
+                }}
+              />
       </div>
 
-      <div className="relative">
-        <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-16">
-          <div className="flex items-center space-x-2 md:space-x-4 mb-8 md:mb-12 animate-fadeIn">
-            <button
-              onClick={() => navigate(-1)}
-              className="group inline-flex items-center space-x-1.5 md:space-x-2 px-3 md:px-5 py-2 md:py-2.5 bg-white/5 backdrop-blur-xl rounded-xl text-white/90 hover:bg-white/10 transition-all duration-300 border border-white/10 hover:border-white/20 text-sm md:text-base"
+            {/* Image container */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.6 }}
+              className="relative group"
             >
-              <ArrowLeft className="w-4 h-4 md:w-5 md:h-5 group-hover:-translate-x-1 transition-transform" />
-              <span>Back</span>
-            </button>
-            <div className="flex items-center space-x-1 md:space-x-2 text-sm md:text-base text-white/50">
-              <span>Projects</span>
-              <ChevronRight className="w-3 h-3 md:w-4 md:h-4" />
-              <span className="text-white/90 truncate">{project.Title}</span>
+              <div className="relative bg-[#0a0a1a] p-2 rounded-lg">
+                <motion.img
+                  src={project.image}
+                  alt={project.title}
+                  className="w-full h-auto rounded-lg"
+                  initial={{ scale: 0.95, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: 0.5, delay: 0.8 }}
+                  whileHover={{ 
+                    scale: 1.02,
+                    transition: { duration: 0.3 }
+                  }}
+                />
+              </div>
+            </motion.div>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.6 }}
+          className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12"
+        >
+          <div className="bg-[#0a0a1a] p-6 rounded-lg border border-white/10">
+            <div className="flex items-center gap-3 mb-4">
+              <Layout className="w-6 h-6 text-purple-400" />
+              <h2 className="text-2xl font-bold">Project Overview</h2>
             </div>
+            <p className="text-gray-300">{project.details.overview}</p>
+          </div>
+          <div className="bg-[#0a0a1a] p-6 rounded-lg border border-white/10">
+            <div className="flex items-center gap-3 mb-4">
+              <AlertCircle className="w-6 h-6 text-blue-400" />
+              <h2 className="text-2xl font-bold">The Challenge</h2>
+            </div>
+            <p className="text-gray-300">{project.details.challenge}</p>
+          </div>
+        </motion.div>
+
+        {project.title === "NeighborSwap" && (
+          <>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.8 }}
+              className="mb-12"
+            >
+              <div className="flex items-center gap-3 mb-6">
+                <Layout className="w-6 h-6 text-purple-400" />
+                <h2 className="text-3xl font-bold">Solution & Design Process</h2>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-8 md:gap-16">
-            <div className="space-y-6 md:space-y-10 animate-slideInLeft">
-              <div className="space-y-4 md:space-y-6">
-                <h1 className="text-3xl md:text-6xl font-bold bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 bg-clip-text text-transparent leading-tight">
-                  {project.Title}
-                </h1>
-                <div className="relative h-1 w-16 md:w-24">
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full animate-pulse" />
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full blur-sm" />
+              {/* Goal */}
+              <div className="bg-[#0a0a1a] p-6 rounded-lg border border-white/10 mb-8">
+                <div className="flex items-center gap-3 mb-4">
+                  <Award className="w-6 h-6 text-purple-400" />
+                  <h3 className="text-xl font-bold">The Goal</h3>
+                </div>
+                <p className="text-gray-300 whitespace-pre-line">{project.details.solution.goal}</p>
+              </div>
+
+              {/* My Role */}
+              <div className="bg-[#0a0a1a] p-6 rounded-lg border border-white/10 mb-8">
+                <div className="flex items-center gap-3 mb-4">
+                  <UserCheck className="w-6 h-6 text-blue-400" />
+                  <h3 className="text-xl font-bold">My Role</h3>
+                </div>
+                <p className="text-gray-300 whitespace-pre-line">{project.details.solution.myRole}</p>
+              </div>
+
+              {/* Key Features */}
+              <div className="bg-[#0a0a1a] p-6 rounded-lg border border-white/10 mb-8">
+                <div className="flex items-center gap-3 mb-4">
+                  <Star className="w-6 h-6 text-purple-400" />
+                  <h3 className="text-xl font-bold">Key Features</h3>
+                </div>
+                <ul className="list-disc list-inside text-gray-300 space-y-2">
+                  {project.details.solution.keyFeatures.map((feature, index) => (
+                    <motion.li
+                      key={index}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.3, delay: 0.1 * index }}
+                    >
+                      {feature}
+                    </motion.li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Design Process */}
+              <div className="bg-[#0a0a1a] p-6 rounded-lg border border-white/10 mb-8">
+                <div className="flex items-center gap-3 mb-4">
+                  <Code className="w-6 h-6 text-blue-400" />
+                  <h3 className="text-xl font-bold">Design Process</h3>
+                </div>
+                <ul className="list-disc list-inside text-gray-300 space-y-2">
+                  {project.details.solution.designProcess.map((step, index) => (
+                    <motion.li
+                      key={index}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.3, delay: 0.1 * index }}
+                    >
+                      {step}
+                    </motion.li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Challenges & Solutions */}
+              <div className="bg-[#0a0a1a] p-6 rounded-lg border border-white/10">
+                <div className="flex items-center gap-3 mb-4">
+                  <AlertCircle className="w-6 h-6 text-purple-400" />
+                  <h3 className="text-xl font-bold">Challenges & Solutions</h3>
+                </div>
+                <div className="space-y-6">
+                  {project.details.solution.challenges.map((item, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, delay: 0.1 * index }}
+                      className="border-b border-white/10 pb-4 last:border-0 last:pb-0"
+                    >
+                      <h4 className="text-lg font-semibold text-blue-400 mb-2">Challenge: {item.challenge}</h4>
+                      <p className="text-gray-300">Solution: {item.solution}</p>
+                    </motion.div>
+                  ))}
                 </div>
               </div>
+            </motion.div>
+          </>
+        )}
 
-              <div className="prose prose-invert max-w-none">
-                <p className="text-base md:text-lg text-gray-300/90 leading-relaxed">
-                  {project.Description}
-                </p>
+        {project.title === "Smart Wealth by NBK" && (
+          <>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.8 }}
+              className="mb-12"
+            >
+              <div className="flex items-center gap-3 mb-6">
+                <Layout className="w-6 h-6 text-purple-400" />
+                <h2 className="text-3xl font-bold">Platform-Specific Design Considerations</h2>
               </div>
-
-              <ProjectStats project={project} />
-
-              <div className="flex flex-wrap gap-3 md:gap-4">
-                {/* Action buttons */}
-                <a
-                  href={project.Link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group relative inline-flex items-center space-x-1.5 md:space-x-2 px-4 md:px-8 py-2.5 md:py-4 bg-gradient-to-r from-blue-600/10 to-purple-600/10 hover:from-blue-600/20 hover:to-purple-600/20 text-blue-300 rounded-xl transition-all duration-300 border border-blue-500/20 hover:border-blue-500/40 backdrop-blur-xl overflow-hidden text-sm md:text-base"
-                >
-                  <div className="absolute inset-0 translate-y-[100%] bg-gradient-to-r from-blue-600/10 to-purple-600/10 transition-transform duration-300 group-hover:translate-y-[0%]" />
-                  <ExternalLink className="relative w-4 h-4 md:w-5 md:h-5 group-hover:rotate-12 transition-transform" />
-                  <span className="relative font-medium">Live Demo</span>
-                </a>
-
-                <a
-                  href={project.Github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group relative inline-flex items-center space-x-1.5 md:space-x-2 px-4 md:px-8 py-2.5 md:py-4 bg-gradient-to-r from-purple-600/10 to-pink-600/10 hover:from-purple-600/20 hover:to-pink-600/20 text-purple-300 rounded-xl transition-all duration-300 border border-purple-500/20 hover:border-purple-500/40 backdrop-blur-xl overflow-hidden text-sm md:text-base"
-                  onClick={(e) => !handleGithubClick(project.Github) && e.preventDefault()}
-                >
-                  <div className="absolute inset-0 translate-y-[100%] bg-gradient-to-r from-purple-600/10 to-pink-600/10 transition-transform duration-300 group-hover:translate-y-[0%]" />
-                  <Github className="relative w-4 h-4 md:w-5 md:h-5 group-hover:rotate-12 transition-transform" />
-                  <span className="relative font-medium">Github</span>
-                </a>
-              </div>
-
-              <div className="space-y-4 md:space-y-6">
-                <h3 className="text-lg md:text-xl font-semibold text-white/90 mt-[3rem] md:mt-0 flex items-center gap-2 md:gap-3">
-                  <Code2 className="w-4 h-4 md:w-5 md:h-5 text-blue-400" />
-                  Technologies Used
-                </h3>
-                {project.TechStack.length > 0 ? (
-                  <div className="flex flex-wrap gap-2 md:gap-3">
-                    {project.TechStack.map((tech, index) => (
-                      <TechBadge key={index} tech={tech} />
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-sm md:text-base text-gray-400 opacity-50">No technologies added.</p>
-                )}
-              </div>
-            </div>
-
-            <div className="space-y-6 md:space-y-10 animate-slideInRight">
-              <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl group">
+              <p className="text-gray-300 mb-6">{project.details.solution.platformConsiderations}</p>
               
-                <div className="absolute inset-0 bg-gradient-to-t from-[#030014] via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <img
-                  src={project.Img}
-                  alt={project.Title}
-                  className="w-full  object-cover transform transition-transform duration-700 will-change-transform group-hover:scale-105"
-                  onLoad={() => setIsImageLoaded(true)}
-                />
-                <div className="absolute inset-0 border-2 border-white/0 group-hover:border-white/10 transition-colors duration-300 rounded-2xl" />
-              </div>
-
-              {/* Fitur Utama */}
-              <div className="bg-white/[0.02] backdrop-blur-xl rounded-2xl p-8 border border-white/10 space-y-6 hover:border-white/20 transition-colors duration-300 group">
-                <h3 className="text-xl font-semibold text-white/90 flex items-center gap-3">
-                  <Star className="w-5 h-5 text-yellow-400 group-hover:rotate-[20deg] transition-transform duration-300" />
-                  Key Features
-                </h3>
-                {project.Features.length > 0 ? (
-                  <ul className="list-none space-y-2">
-                    {project.Features.map((feature, index) => (
-                      <FeatureItem key={index} feature={feature} />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="bg-[#0a0a1a] p-6 rounded-lg border border-white/10">
+                  <div className="flex items-center gap-3 mb-4">
+                    <Package className="w-6 h-6 text-purple-400" />
+                    <h3 className="text-xl font-bold">iOS Design</h3>
+                  </div>
+                  <ul className="list-disc list-inside text-gray-300 space-y-2">
+                    {project.details.solution.ios.map((item, index) => (
+                      <motion.li
+                        key={index}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.3, delay: 0.1 * index }}
+                      >
+                        {item}
+                      </motion.li>
                     ))}
                   </ul>
-                ) : (
-                  <p className="text-gray-400 opacity-50">No features added.</p>
-                )}
+                </div>
+                <div className="bg-[#0a0a1a] p-6 rounded-lg border border-white/10">
+                  <div className="flex items-center gap-3 mb-4">
+                    <Cpu className="w-6 h-6 text-blue-400" />
+                    <h3 className="text-xl font-bold">Android Design</h3>
+                  </div>
+                  <ul className="list-disc list-inside text-gray-300 space-y-2">
+                    {project.details.solution.android.map((item, index) => (
+                      <motion.li
+                        key={index}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.3, delay: 0.1 * index }}
+                      >
+                        {item}
+                      </motion.li>
+                    ))}
+                  </ul>
+                </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
+            </motion.div>
+          </>
+        )}
 
-      <style jsx>{`
-        @keyframes blob {
-          0% {
-            transform: translate(0px, 0px) scale(1);
-          }
-          33% {
-            transform: translate(30px, -50px) scale(1.1);
-          }
-          66% {
-            transform: translate(-20px, 20px) scale(0.9);
-          }
-          100% {
-            transform: translate(0px, 0px) scale(1);
-          }
-        }
-        .animate-blob {
-          animation: blob 10s infinite;
-        }
-        .animation-delay-2000 {
-          animation-delay: 2s;
-        }
-        .animation-delay-4000 {
-          animation-delay: 4s;
-        }
-        .animate-fadeIn {
-          animation: fadeIn 0.7s ease-out;
-        }
-        .animate-slideInLeft {
-          animation: slideInLeft 0.7s ease-out;
-        }
-        .animate-slideInRight {
-          animation: slideInRight 0.7s ease-out;
-        }
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
-        }
-        @keyframes slideInLeft {
-          from {
-            opacity: 0;
-            transform: translateX(-30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-        @keyframes slideInRight {
-          from {
-            opacity: 0;
-            transform: translateX(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-      `}</style>
+        {project.title === "Designing Web Page" && project.details.solution && (
+          <>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.8 }}
+              className="mb-12"
+            >
+              <div className="flex items-center gap-3 mb-6">
+                <Layout className="w-6 h-6 text-purple-400" />
+                <h2 className="text-3xl font-bold">Design Solution</h2>
+              </div>
+
+              {/* Sections */}
+              <div className="bg-[#0a0a1a] p-6 rounded-lg border border-white/10 mb-8">
+                <div className="flex items-center gap-3 mb-4">
+                  <Layers className="w-6 h-6 text-purple-400" />
+                  <h3 className="text-xl font-bold">Page Sections</h3>
+                </div>
+                <ul className="list-disc list-inside text-gray-300 space-y-2">
+                  {project.details.solution.sections.map((section, index) => (
+                    <motion.li
+                      key={index}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.3, delay: 0.1 * index }}
+                    >
+                      {section}
+                    </motion.li>
+                  ))}
+                </ul>
+            </div>
+
+              {/* Process */}
+              <div className="bg-[#0a0a1a] p-6 rounded-lg border border-white/10 mb-8">
+                <div className="flex items-center gap-3 mb-4">
+                  <Code className="w-6 h-6 text-blue-400" />
+                  <h3 className="text-xl font-bold">Design Process</h3>
+                </div>
+                <ul className="list-disc list-inside text-gray-300 space-y-2">
+                  {project.details.solution.process.map((step, index) => (
+                    <motion.li
+                      key={index}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.3, delay: 0.1 * index }}
+                    >
+                      {step}
+                    </motion.li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Tools */}
+              <div className="bg-[#0a0a1a] p-6 rounded-lg border border-white/10">
+                <div className="flex items-center gap-3 mb-4">
+                  <Package className="w-6 h-6 text-purple-400" />
+                  <h3 className="text-xl font-bold">Tools & Documentation</h3>
+                </div>
+                <ul className="list-disc list-inside text-gray-300 space-y-2">
+                  {project.details.solution.tools.map((tool, index) => (
+                    <motion.li
+                      key={index}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.3, delay: 0.1 * index }}
+                    >
+                      {tool}
+                    </motion.li>
+                    ))}
+                  </ul>
+              </div>
+            </motion.div>
+          </>
+        )}
+
+        {project.title === "Emirates Flight Search" && (
+          <>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.8 }}
+              className="mb-12"
+            >
+              <div className="flex items-center gap-3 mb-6">
+                <Layout className="w-6 h-6 text-purple-400" />
+                <h2 className="text-3xl font-bold">Design Solution</h2>
+              </div>
+
+              {/* Research & Analysis */}
+              <div className="bg-[#0a0a1a] p-6 rounded-lg border border-white/10 mb-8">
+                <div className="flex items-center gap-3 mb-4">
+                  <Info className="w-6 h-6 text-purple-400" />
+                  <h3 className="text-xl font-bold">Research & Analysis</h3>
+                </div>
+                <ul className="list-disc list-inside text-gray-300 space-y-2">
+                  <li>Analyzed user behavior and drop-off points</li>
+                  <li>Studied competitor search interfaces</li>
+                  <li>Identified key friction points in the current design</li>
+                  <li>Gathered user feedback on search experience</li>
+                </ul>
+              </div>
+
+              {/* Design Process */}
+              <div className="bg-[#0a0a1a] p-6 rounded-lg border border-white/10 mb-8">
+                <div className="flex items-center gap-3 mb-4">
+                  <Code className="w-6 h-6 text-blue-400" />
+                  <h3 className="text-xl font-bold">Design Process</h3>
+                </div>
+                <ul className="list-disc list-inside text-gray-300 space-y-2">
+                  <li>Created wireframes for new search widget layout</li>
+                  <li>Designed simplified header navigation</li>
+                  <li>Implemented clear visual hierarchy</li>
+                  <li>Added micro-interactions for better feedback</li>
+                </ul>
+              </div>
+
+              {/* Key Improvements */}
+              <div className="bg-[#0a0a1a] p-6 rounded-lg border border-white/10">
+                <div className="flex items-center gap-3 mb-4">
+                  <Star className="w-6 h-6 text-purple-400" />
+                  <h3 className="text-xl font-bold">Key Improvements</h3>
+                </div>
+                <ul className="list-disc list-inside text-gray-300 space-y-2">
+                  <li>Streamlined search widget interface</li>
+                  <li>Enhanced visual hierarchy and readability</li>
+                  <li>Improved mobile responsiveness</li>
+                  <li>Added clear call-to-action buttons</li>
+                </ul>
+              </div>
+            </motion.div>
+          </>
+        )}
+
+        {project.title === "Skin Routine Infographic" && (
+          <>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.8 }}
+              className="mb-12"
+            >
+              <div className="flex items-center gap-3 mb-6">
+                <Layout className="w-6 h-6 text-purple-400" />
+                <h2 className="text-3xl font-bold">Design Solution</h2>
+              </div>
+
+              {/* Research & Analysis */}
+              <div className="bg-[#0a0a1a] p-6 rounded-lg border border-white/10 mb-8">
+                <div className="flex items-center gap-3 mb-4">
+                  <Info className="w-6 h-6 text-purple-400" />
+                  <h3 className="text-xl font-bold">Research & Analysis</h3>
+                </div>
+                <ul className="list-disc list-inside text-gray-300 space-y-2">
+                  <li>Studied different skin types and their needs</li>
+                  <li>Analyzed existing skincare guides</li>
+                  <li>Identified key information gaps</li>
+                  <li>Researched visual hierarchy best practices</li>
+                </ul>
+              </div>
+
+              {/* Design Process */}
+              <div className="bg-[#0a0a1a] p-6 rounded-lg border border-white/10 mb-8">
+                <div className="flex items-center gap-3 mb-4">
+                  <Code className="w-6 h-6 text-blue-400" />
+                  <h3 className="text-xl font-bold">Design Process</h3>
+                </div>
+                <ul className="list-disc list-inside text-gray-300 space-y-2">
+                  <li>Created initial sketches and layout concepts</li>
+                  <li>Developed color scheme and typography</li>
+                  <li>Designed iconography and visual elements</li>
+                  <li>Iterated on information hierarchy</li>
+                </ul>
+              </div>
+
+              {/* Key Features */}
+              <div className="bg-[#0a0a1a] p-6 rounded-lg border border-white/10">
+                <div className="flex items-center gap-3 mb-4">
+                  <Star className="w-6 h-6 text-purple-400" />
+                  <h3 className="text-xl font-bold">Key Features</h3>
+                </div>
+                <ul className="list-disc list-inside text-gray-300 space-y-2">
+                  <li>Clear skin type categorization</li>
+                  <li>Step-by-step routine visualization</li>
+                  <li>Product recommendations by skin type</li>
+                  <li>Easy-to-follow morning and evening routines</li>
+                </ul>
+              </div>
+            </motion.div>
+          </>
+        )}
+
+        {project.title === "Personal Branding Logo" && (
+          <>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.8 }}
+              className="mb-12"
+            >
+              <div className="flex items-center gap-3 mb-6">
+                <Layout className="w-6 h-6 text-purple-400" />
+                <h2 className="text-3xl font-bold">Design Solution</h2>
+              </div>
+
+              {/* Concept Development */}
+              <div className="bg-[#0a0a1a] p-6 rounded-lg border border-white/10 mb-8">
+                <div className="flex items-center gap-3 mb-4">
+                  <Info className="w-6 h-6 text-purple-400" />
+                  <h3 className="text-xl font-bold">Concept Development</h3>
+                </div>
+                <ul className="list-disc list-inside text-gray-300 space-y-2">
+                  <li>Explored cultural symbolism and meaning</li>
+                  <li>Sketching initial logo concepts</li>
+                  <li>Testing different typography styles</li>
+                  <li>Refining geometric proportions</li>
+                </ul>
+              </div>
+
+              {/* Design Process */}
+              <div className="bg-[#0a0a1a] p-6 rounded-lg border border-white/10 mb-8">
+                <div className="flex items-center gap-3 mb-4">
+                  <Code className="w-6 h-6 text-blue-400" />
+                  <h3 className="text-xl font-bold">Design Process</h3>
+                </div>
+                <ul className="list-disc list-inside text-gray-300 space-y-2">
+                  <li>Vector tracing and refinement</li>
+                  <li>Color palette development</li>
+                  <li>Testing different applications</li>
+                  <li>Creating responsive variations</li>
+                </ul>
+              </div>
+
+              {/* Key Features */}
+              <div className="bg-[#0a0a1a] p-6 rounded-lg border border-white/10">
+                <div className="flex items-center gap-3 mb-4">
+                  <Star className="w-6 h-6 text-purple-400" />
+                  <h3 className="text-xl font-bold">Key Features</h3>
+                </div>
+                <ul className="list-disc list-inside text-gray-300 space-y-2">
+                  <li>Bilingual letter integration</li>
+                  <li>Minimalist geometric design</li>
+                  <li>Versatile color variations</li>
+                  <li>Scalable vector format</li>
+                </ul>
+            </div>
+            </motion.div>
+          </>
+        )}
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 1.4 }}
+          className="mb-12"
+        >
+          <div className="flex items-center gap-3 mb-4">
+            <Award className="w-6 h-6 text-purple-400" />
+            <h2 className="text-3xl font-bold">Final Solution & Impact</h2>
+          </div>
+          <p className="text-gray-300">{project.details.impact}</p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 1.6 }}
+          className="flex flex-col md:flex-row gap-6 justify-center mb-12"
+        >
+          {project.title !== "Emirates Flight Search" && 
+           project.title !== "Personal Branding Logo" && 
+           project.title !== "Skin Routine Infographic" && (
+            <a
+              href={project.title === "Designing Web Page" 
+                ? "https://www.figma.com/design/J2Gf24ruu5UpQ5nQH3G8vA/Untitled?node-id=0-1&t=a8Nq7XoV8FO84bv4-1"
+                : "https://www.figma.com/design/2j6GDWePrzrXhwGHkEiz58/Untitled?node-id=0-1&t=rSnplhHLC5afw3Hs-1"
+              }
+              target="_blank"
+              rel="noopener noreferrer"
+              className="relative inline-flex items-center justify-center px-8 py-3 overflow-hidden font-medium transition duration-300 ease-out border-2 border-purple-500 rounded-lg shadow-md group"
+            >
+              <span className="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-gradient-to-r from-purple-500 to-blue-500 group-hover:translate-x-0 ease">
+                <ExternalLink className="w-5 h-5 mr-2" />
+                View Demo on Figma
+              </span>
+              <span className="absolute flex items-center justify-center w-full h-full text-purple-500 transition-all duration-300 transform group-hover:translate-x-full ease">
+                <ExternalLink className="w-5 h-5 mr-2" />
+                View Demo on Figma
+              </span>
+              <span className="relative invisible">View Demo on Figma</span>
+            </a>
+          )}
+
+          <a
+            href={
+              project.title === "Emirates Flight Search" 
+                ? "/assets/EmiratesCaseStudy.pdf" 
+                : project.title === "Personal Branding Logo"
+                ? "/assets/logoRepresentation.pdf"
+                : project.title === "Designing Web Page"
+                ? "/assets/WebPageDesign.pdf"
+                : project.title === "Skin Routine Infographic"
+                ? "/assets/skinRoutineInfographic.pdf"
+                : "/assets/NBKCaseStudy.pdf"
+            }
+            download={
+              project.title === "Emirates Flight Search" 
+                ? "EmiratesCaseStudy.pdf" 
+                : project.title === "Personal Branding Logo"
+                ? "logoRepresentation.pdf"
+                : project.title === "Designing Web Page"
+                ? "WebPageDesign.pdf"
+                : project.title === "Skin Routine Infographic"
+                ? "skinRoutineInfographic.pdf"
+                : "NBKCaseStudy.pdf"
+            }
+            className="relative inline-flex items-center justify-center px-8 py-3 overflow-hidden font-medium transition duration-300 ease-out border-2 border-blue-500 rounded-lg shadow-md group"
+          >
+            <span className="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-gradient-to-r from-blue-500 to-purple-500 group-hover:translate-x-0 ease">
+              <Star className="w-5 h-5 mr-2" />
+              {project.title === "Personal Branding Logo" || 
+               project.title === "Designing Web Page" || 
+               project.title === "Skin Routine Infographic"
+                ? "Download PDF" 
+                : "Download Full Case Study (PDF)"}
+            </span>
+            <span className="absolute flex items-center justify-center w-full h-full text-blue-500 transition-all duration-300 transform group-hover:translate-x-full ease">
+              <Star className="w-5 h-5 mr-2" />
+              {project.title === "Personal Branding Logo" || 
+               project.title === "Designing Web Page" || 
+               project.title === "Skin Routine Infographic"
+                ? "Download PDF" 
+                : "Download Full Case Study (PDF)"}
+            </span>
+            <span className="relative invisible">
+              {project.title === "Personal Branding Logo" || 
+               project.title === "Designing Web Page" || 
+               project.title === "Skin Routine Infographic"
+                ? "Download PDF" 
+                : "Download Full Case Study (PDF)"}
+            </span>
+          </a>
+        </motion.div>
+      </div>
     </div>
   );
 };
 
-export default ProjectDetails;
+export default ProjectDetail;
