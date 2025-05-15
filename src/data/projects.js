@@ -1,49 +1,46 @@
 export const projects = [
   {
     id: 1,
-    title: "NeighborSwap",
-    description: "A mobile app that brings back bartering—digitally. NeighborSwap helps people in the same area exchange skills and items without money, building trust and stronger local communities.",
-    image: "/assets/neighborswap.jpg",
+    title: "AidTrace",
+    description: "A mobile app designed to empower beneficiaries of humanitarian aid by allowing them to track aid, provide anonymous feedback, and request urgent help. It also enables NGOs to communicate effectively and monitor service delivery.",
+    image: "/assets/mockup1.jpg",
     category: "UI/UX Design",
     technologies: ["Figma", "UX Research", "Adobe Illustrator", "Adobe Photoshop", "Material Design", "Human Interface Guidelines", "iOS", "Android"],
-    liveDemo: "#",
+    liveDemo: "https://www.figma.com/design/pspEl5GtDZUmyBG3P97cmm/AidTraceApp1?node-id=52-924&t=fhKFuyuiK7QJSBUe-1",
     caseStudy: "#",
     details: {
-      overview: "NeighborSwap is a conceptual mobile app designed to make local bartering easy and trustworthy. Users can trade skills or lend items with nearby neighbors—no money involved. This project was created to explore community-based design, local trust-building, and meaningful interactions.",
-      challenge: "In modern urban life, neighbors often don't interact, despite many shared needs. People own tools, skills, or time they could offer, but there's no simple or safe way to exchange those with others nearby.",
+      overview: "AidTrace is a mobile app designed to empower beneficiaries of humanitarian aid by allowing them to track aid, provide anonymous feedback, and request urgent help. It also enables NGOs to communicate effectively and monitor service delivery.",
+      challenge: "Aid recipients often lack clarity about aid, have no safe way to report issues, and feel disconnected. NGOs face challenges in real-time communication and monitoring service quality.",
       solution: {
-        goal: "Design a user-friendly mobile platform where neighbors can:\n\n• Offer and request skills or items\n• Find matches quickly and safely\n• Schedule swaps or services easily\n• Build trust through ratings and gamification",
-        myRole: "UX/UI Designer – I handled end-to-end design:\n\n• Market and user research\n• Wireframing and user flow creation\n• UI design and prototyping in Figma\n• Case study writing and visual storytelling",
+        description: "AidTrace provides a secure platform for beneficiaries to track aid, submit feedback, and report urgent concerns, while offering NGOs tools to manage aid, monitor feedback, and improve service delivery.",
+        goal: "Design a user-friendly, secure app to empower aid recipients and enhance NGO efficiency.",
+        myRole: "Lead UI/UX designer, responsible for wireframes, prototypes, and the visual interface for the app and dashboard.",
         keyFeatures: [
-          "Splash & Onboarding: Quick and friendly intro to how NeighborSwap works",
-          "Profile Setup: Add skills, items, requests, and trust signals",
-          "Main Dashboard: View nearby offers, requests, and quick matches",
-          "Match Details: View compatibility and chat instantly",
-          "Swap Calendar: Schedule appointments or item pick-ups",
-          "In-App Chat: Safe communication within the app",
-          "Community Feed: Share tips, news, or public requests",
-          "Gamification: Earn badges and grow your local reputation",
-          "Rating System: Leave reviews and verify good neighbors"
+          "Aid Timeline: Tracks received and upcoming aid",
+          "Anonymous Feedback: One-tap ratings and comments",
+          "Urgent Help Request: Discreetly report concerns",
+          "QR Code Login: Secure, private login",
+          "Multi-language Support & Icons: Accessible to low literacy users",
+          "NGO Dashboard: Manage distributions and monitor feedback"
         ],
         designProcess: [
-          "Researched sharing economy models (like OLIO, Nextdoor)",
-          "Mapped typical user journeys: offering, requesting, matching",
-          "Created low-fidelity wireframes to test flows",
-          "Designed and iterated high-fidelity UI in Figma",
-          "Focused on trust-building visuals and inclusive UX"
+          "Research: Focused on user needs for accessibility and privacy",
+          "Wireframing & Prototyping: Defined layout and flows, refined through user testing",
+          "User Testing: Iterated based on feedback from both beneficiaries and NGOs",
+          "Final Design: A clean, intuitive interface emphasizing security and usability"
         ],
         challenges: [
           {
-            challenge: "Making users feel safe sharing with strangers",
-            solution: "Verified profiles, visible reviews, badges, and controlled chat"
+            challenge: "Privacy & Security",
+            solution: "Implemented secure QR logins and encrypted data"
           },
           {
-            challenge: "Balancing offer/request visibility without clutter",
-            solution: "Smart filters and category-based browsing"
+            challenge: "Multilingual & Low Literacy",
+            solution: "Used icons and simple language to improve accessibility"
           }
         ]
       },
-      impact: "NeighborSwap was a deep dive into designing for community trust and informal economies. It taught me how to build systems that feel both friendly and safe, and how to design flexible user flows for multiple types of users (helpers, requesters, casual swappers)."
+      impact: "AidTrace empowers beneficiaries with control over their aid and enhances NGO transparency. The app fosters accountability, speeds up response times, and creates a feedback culture, making aid more efficient and dignified."
     }
   },
   {
@@ -136,7 +133,7 @@ export const projects = [
     image: "/assets/smartwealth.png",
     category: "UI/UX Design",
     technologies: ["Figma", "iOS", "Android", "Material Design", "Human Interface Guidelines"],
-    liveDemo: "https://www.figma.com/design/2j6GDWePrzrXhwGHkEiz58/Untitled?node-id=0-1&t=Q3p9rmXrggWrTuvC-1",
+    liveDemo: "",
     caseStudy: "/assets/smart-wealth-case-study.pdf",
     details: {
       overview: "Smart Wealth by NBK is a wealth management application designed to help users make informed investment decisions. This case study focuses on creating an intuitive and engaging onboarding experience for both iOS and Android platforms, ensuring a seamless introduction to the app's features.",

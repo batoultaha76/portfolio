@@ -1,7 +1,7 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { ExternalLink, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
+import PropTypes from 'prop-types';
 
 const CardProject = ({ Img, Title, Description, Link: ProjectLink, id }) => {
   // Handle kasus ketika ProjectLink kosong
@@ -23,7 +23,9 @@ const CardProject = ({ Img, Title, Description, Link: ProjectLink, id }) => {
 
   const hideLiveDemo = Title === "Emirates Flight Search" || 
                       Title === "Skin Routine Infographic" || 
-                      Title === "Personal Branding Logo";
+                      Title === "Personal Branding Logo" ||
+                      Title === "Smart Wealth by NBK" ||
+                      Title === "Designing Web Page";
   
   return (
     <div className="group relative w-full h-full min-h-[22rem]">
@@ -36,7 +38,11 @@ const CardProject = ({ Img, Title, Description, Link: ProjectLink, id }) => {
               <img
                 src={Img}
                 alt={Title}
-                className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
+                className={`w-full h-full ${
+                  Title === "Personal Branding Logo" || Title === "Skin Routine Infographic"
+                    ? "object-contain p-4" 
+                    : "object-cover"
+                } transform group-hover:scale-105 transition-transform duration-500`}
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center">{Img}</div>
@@ -71,6 +77,7 @@ const CardProject = ({ Img, Title, Description, Link: ProjectLink, id }) => {
                 <motion.div
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
+                  className="ml-auto"
                 >
                   <Link
                     to={`/project/${id}`}
@@ -87,7 +94,7 @@ const CardProject = ({ Img, Title, Description, Link: ProjectLink, id }) => {
                   </Link>
                 </motion.div>
               ) : (
-                <span className="text-gray-500 text-sm">Details Not Available</span>
+                <span className="text-gray-500 text-sm ml-auto">Details Not Available</span>
               )}
             </div>
           </div>
@@ -97,6 +104,14 @@ const CardProject = ({ Img, Title, Description, Link: ProjectLink, id }) => {
       </div>
     </div>
   );
+};
+
+CardProject.propTypes = {
+  Img: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
+  Title: PropTypes.string.isRequired,
+  Description: PropTypes.string.isRequired,
+  Link: PropTypes.string,
+  id: PropTypes.number
 };
 
 export default CardProject;

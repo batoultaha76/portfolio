@@ -85,7 +85,14 @@ const ProjectDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#030014] text-white pt-20 px-4 md:px-8">
+    <div className="min-h-screen bg-[#030014] text-white pt-20 px-4 md:px-8 relative">
+      {/* Glowy background effect */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-white/10 rounded-full blur-[120px] pointer-events-none"></div>
+        <div className="absolute top-1/4 left-1/4 w-[300px] h-[300px] bg-white/5 rounded-full blur-[100px] pointer-events-none"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-white/5 rounded-full blur-[100px] pointer-events-none"></div>
+      </div>
+
       {/* Scroll to top button */}
       <motion.button
         initial={{ opacity: 0, y: 20 }}
@@ -97,7 +104,7 @@ const ProjectDetail = () => {
         <ArrowUp className="w-6 h-6 text-white group-hover:-translate-y-1 transition-transform" />
       </motion.button>
 
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -125,12 +132,11 @@ const ProjectDetail = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="mb-16 pt-8"
+          className="mb-16 pt-8 text-center"
         >
           <h1 className="text-4xl md:text-5xl font-bold mb-8 pb-4 bg-gradient-to-r from-purple-400 to-blue-500 text-transparent bg-clip-text">
             {project.title}
           </h1>
-          <p className="text-gray-300 text-lg">{project.description}</p>
         </motion.div>
 
         <motion.div
@@ -158,7 +164,7 @@ const ProjectDetail = () => {
                   repeatType: "reverse",
                 }}
               />
-      </div>
+            </div>
 
             {/* Image container */}
             <motion.div
@@ -218,7 +224,7 @@ const ProjectDetail = () => {
               <div className="flex items-center gap-3 mb-6">
                 <Layout className="w-6 h-6 text-purple-400" />
                 <h2 className="text-3xl font-bold">Solution & Design Process</h2>
-          </div>
+              </div>
 
               {/* Goal */}
               <div className="bg-[#0a0a1a] p-6 rounded-lg border border-white/10 mb-8">
@@ -390,7 +396,7 @@ const ProjectDetail = () => {
                     </motion.li>
                   ))}
                 </ul>
-            </div>
+              </div>
 
               {/* Process */}
               <div className="bg-[#0a0a1a] p-6 rounded-lg border border-white/10 mb-8">
@@ -428,8 +434,8 @@ const ProjectDetail = () => {
                     >
                       {tool}
                     </motion.li>
-                    ))}
-                  </ul>
+                  ))}
+                </ul>
               </div>
             </motion.div>
           </>
@@ -604,23 +610,37 @@ const ProjectDetail = () => {
                   <li>Versatile color variations</li>
                   <li>Scalable vector format</li>
                 </ul>
-            </div>
+              </div>
             </motion.div>
           </>
         )}
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 1.4 }}
-          className="mb-12"
-        >
-          <div className="flex items-center gap-3 mb-4">
-            <Award className="w-6 h-6 text-purple-400" />
-            <h2 className="text-3xl font-bold">Final Solution & Impact</h2>
-          </div>
-          <p className="text-gray-300">{project.details.impact}</p>
-        </motion.div>
+        {project.title === "AidTrace" && (
+          <>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.8 }}
+              className="mb-12"
+            >
+              <div className="flex items-center gap-3 mb-6">
+                <AlertCircle className="w-6 h-6 text-purple-400" />
+                <h2 className="text-3xl font-bold">The Challenge</h2>
+              </div>
+              <div className="bg-[#0a0a1a] p-6 rounded-lg border border-white/10 mb-8">
+                <p className="text-gray-300">{project.details.challenge}</p>
+              </div>
+
+              <div className="flex items-center gap-3 mb-6">
+                <Award className="w-6 h-6 text-purple-400" />
+                <h2 className="text-3xl font-bold">Final Solution & Impact</h2>
+              </div>
+              <div className="bg-[#0a0a1a] p-6 rounded-lg border border-white/10">
+                <p className="text-gray-300">{project.details.impact}</p>
+              </div>
+            </motion.div>
+          </>
+        )}
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -630,10 +650,12 @@ const ProjectDetail = () => {
         >
           {project.title !== "Emirates Flight Search" && 
            project.title !== "Personal Branding Logo" && 
-           project.title !== "Skin Routine Infographic" && (
+           project.title !== "Skin Routine Infographic" &&
+           project.title !== "Smart Wealth by NBK" &&
+           project.title !== "Designing Web Page" && (
             <a
-              href={project.title === "Designing Web Page" 
-                ? "https://www.figma.com/design/J2Gf24ruu5UpQ5nQH3G8vA/Untitled?node-id=0-1&t=a8Nq7XoV8FO84bv4-1"
+              href={project.title === "AidTrace"
+                ? "https://www.figma.com/design/pspEl5GtDZUmyBG3P97cmm/AidTraceApp1?node-id=52-924&t=fhKFuyuiK7QJSBUe-1"
                 : "https://www.figma.com/design/2j6GDWePrzrXhwGHkEiz58/Untitled?node-id=0-1&t=rSnplhHLC5afw3Hs-1"
               }
               target="_blank"

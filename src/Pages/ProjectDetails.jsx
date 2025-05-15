@@ -1,8 +1,11 @@
 import React, { useEffect, memo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, ExternalLink, Github, Calendar, Clock, Users, ChevronDown, ChevronUp, Image as ImageIcon, Maximize2, Minimize2, ChevronRight, ChevronLeft, Star, Award, Target } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Github, Calendar, Clock, Users, ChevronDown, ChevronUp, Image as ImageIcon, Maximize2, Minimize2, ChevronRight, ChevronLeft, Star, Award, Target, Layers, Layout, Globe, Package, Cpu, Code, Info, AlertCircle, PenTool, Code2, ArrowUp } from 'lucide-react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { projects } from '../data/projects';
+import PropTypes from 'prop-types';
 
 const ProjectDetails = memo(({ project }) => {
     const [isImageExpanded, setIsImageExpanded] = useState(false);
@@ -222,6 +225,31 @@ const ProjectDetails = memo(({ project }) => {
                                                 transition={{ duration: 0.5 }}
                                             />
                                         </motion.a>
+                                    )}
+                                    {project.title !== "Emirates Flight Search" && 
+                                     project.title !== "Personal Branding Logo" && 
+                                     project.title !== "Skin Routine Infographic" &&
+                                     project.title !== "Smart Wealth by NBK" &&
+                                     project.title !== "Designing Web Page" && (
+                                      <a
+                                        href={project.title === "AidTrace"
+                                          ? "https://www.figma.com/design/pspEl5GtDZUmyBG3P97cmm/AidTraceApp1?node-id=52-924&t=fhKFuyuiK7QJSBUe-1"
+                                          : "https://www.figma.com/design/2j6GDWePrzrXhwGHkEiz58/Untitled?node-id=0-1&t=rSnplhHLC5afw3Hs-1"
+                                        }
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="relative inline-flex items-center justify-center px-8 py-3 overflow-hidden font-medium transition duration-300 ease-out border-2 border-purple-500 rounded-lg shadow-md group"
+                                      >
+                                        <span className="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-gradient-to-r from-purple-500 to-blue-500 group-hover:translate-x-0 ease">
+                                          <ExternalLink className="w-5 h-5 mr-2" />
+                                          View Demo on Figma
+                                        </span>
+                                        <span className="absolute flex items-center justify-center w-full h-full text-purple-500 transition-all duration-300 transform group-hover:translate-x-full ease">
+                                          <ExternalLink className="w-5 h-5 mr-2" />
+                                          View Demo on Figma
+                                        </span>
+                                        <span className="relative invisible">View Demo on Figma</span>
+                                      </a>
                                     )}
                                 </div>
                             </div>
