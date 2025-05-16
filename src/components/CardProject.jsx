@@ -40,7 +40,9 @@ const CardProject = ({ Img, Title, Description, Link: ProjectLink, id }) => {
     
         <div className="relative p-5 z-10 flex flex-col h-full">
           <div className={`relative overflow-hidden rounded-lg ${
-            Title === "Skin Routine Infographic" ? "h-40 bg-transparent p-2" : "h-48 bg-white"
+            Title === "Personal Branding Logo" ? "h-48 bg-white p-4" : 
+            Title === "Skin Routine Infographic" ? "h-48 bg-white" : 
+            "h-48 bg-white"
           } flex items-center justify-center`}>
             {typeof Img === 'string' ? (
               <img
@@ -50,7 +52,7 @@ const CardProject = ({ Img, Title, Description, Link: ProjectLink, id }) => {
                   Title === "Personal Branding Logo" 
                     ? "object-contain p-4" 
                     : Title === "Skin Routine Infographic"
-                    ? "object-contain h-full w-full"
+                    ? "object-cover"
                     : "object-cover"
                 } transform group-hover:scale-105 transition-transform duration-500`}
               />

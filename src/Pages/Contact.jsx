@@ -164,7 +164,7 @@ const ContactPage = () => {
             <h3 className="text-xl font-semibold text-white mb-4">Connect with Me</h3>
             <div className="flex gap-4">
               <a
-                href="https://www.linkedin.com/in/batoul-taha-9b2b2b2b2/"
+                href="https://www.linkedin.com/in/batoultaha"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-all duration-300 hover:scale-110"
