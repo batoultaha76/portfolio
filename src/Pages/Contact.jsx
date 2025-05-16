@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Mail, Phone, MapPin, Linkedin, Instagram } from "lucide-react";
+import { Mail, Phone, MapPin, Linkedin, Instagram, Sparkles } from "lucide-react";
 import Swal from "sweetalert2";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -123,8 +123,14 @@ const ContactPage = () => {
             Me
           </span>
         </h2>
-        <p className="text-slate-400 max-w-2xl mx-auto text-sm md:text-base mt-2">
+        <p 
+          className="mt-2 text-gray-400 max-w-2xl mx-auto text-base sm:text-lg flex items-center justify-center gap-2"
+          data-aos="zoom-in-up"
+          data-aos-duration="800"
+        >
+          <Sparkles className="w-5 h-5 text-purple-400" />
           Let&apos;s create something beautiful together — drop me a line!
+          <Sparkles className="w-5 h-5 text-purple-400" />
         </p>
       </div>
 

@@ -180,7 +180,7 @@ const Navbar = () => {
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
-                    className={`md:hidden h-2/5 fixed inset-0 bg-[#030014] transition-all duration-300 ease-in-out ${
+                    className={`md:hidden h-[calc(100vh-64px)] fixed inset-0 bg-[#030014] transition-all duration-300 ease-in-out ${
                         isOpen
                             ? "opacity-100 translate-y-0"
                             : "opacity-0 translate-y-[-100%] pointer-events-none"
@@ -188,7 +188,7 @@ const Navbar = () => {
                     style={{ top: "64px" }}
                 >
                     <div className="flex flex-col h-full">
-                        <div className="px-4 py-6 space-y-4 flex-1 ">
+                        <div className="px-4 py-6 space-y-6 flex-1 overflow-y-auto">
                             {navItems.map((item, index) => (
                                 <button
                                     key={item.label}

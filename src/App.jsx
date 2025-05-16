@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { HashRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import "./index.css";
 import Home from "./Pages/Home";
@@ -8,7 +8,7 @@ import AnimatedBackground from "./components/Background";
 import Navbar from "./components/Navbar";
 import Portfolio from "./Pages/Portofolio";
 import ContactPage from "./Pages/Contact";
-import ProjectDetails from "./components/ProjectDetail";
+import ProjectDetail from "./components/ProjectDetail";
 import WelcomeScreen from "./Pages/WelcomeScreen";
 import { AnimatePresence } from 'framer-motion';
 import Footer from "./components/Footer";
@@ -44,16 +44,30 @@ LandingPage.propTypes = {
   setShowWelcome: PropTypes.func.isRequired
 };
 
-const ProjectPageLayout = () => (
+const ProjectPageLayout = () => {
+  const location = useLocation();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
+
+  return (
   <>
     <Navbar />
-    <ProjectDetails />
+    <ProjectDetail />
     <Footer />
   </>
 );
+};
 
 function App() {
-  const [showWelcome, setShowWelcome] = React.useState(true);
+  const [showWelcome, setShowWelcome] = useState(true);
 
   return (
     <Router>
@@ -62,6 +76,7 @@ function App() {
           <Routes>
             <Route path="/" element={<LandingPage showWelcome={showWelcome} setShowWelcome={setShowWelcome} />} />
             <Route path="/project/:id" element={<ProjectPageLayout />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
       </div>

@@ -1,9 +1,9 @@
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import { projects } from '../data/projects';
 import { motion } from 'framer-motion';
-import { ArrowLeft, ExternalLink, Star, Layers, Layout, Globe, Package, Cpu, Code, Info, AlertCircle, Award, PenTool, Code2, ArrowUp, UserCheck } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Star, Layers, Layout, Globe, Package, Cpu, Code, Info, AlertCircle, Award, PenTool, Code2, ArrowUp, UserCheck, Calendar, Clock, Users } from 'lucide-react';
 import PropTypes from 'prop-types';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 
 const TECH_ICONS = {
   Figma: Globe,
@@ -45,13 +45,59 @@ TechBadge.propTypes = {
 const ProjectDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const project = projects.find(p => p.id === parseInt(id));
+  const [project, setProject] = useState(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Scroll to top when component mounts
+  const loadProject = useCallback(() => {
+    try {
+      const projectId = parseInt(id);
+      const foundProject = projects.find(p => p.id === projectId);
+      
+      if (foundProject) {
+        setProject(foundProject);
+        setIsLoading(false);
+        window.scrollTo(0, 0);
+      } else {
+        console.error('Project not found:', projectId);
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.error('Error loading project:', error);
+      setIsLoading(false);
+    }
+  }, [id]);
+
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+    let mounted = true;
+    setIsLoading(true);
+    
+    const loadData = async () => {
+      await loadProject();
+      if (mounted) {
+        setIsLoading(false);
+      }
+    };
+
+    loadData();
+
+    return () => {
+      mounted = false;
+    };
+  }, [id, loadProject]);
+
+  const handleBack = useCallback(() => {
+    // Navigate to home page first
+    navigate('/', { replace: true });
+    
+    // Then scroll to portfolio section after a short delay
+    setTimeout(() => {
+      const portfolioSection = document.getElementById('portfolio');
+      if (portfolioSection) {
+        portfolioSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
+  }, [navigate]);
 
   // Handle scroll visibility
   useEffect(() => {
@@ -70,18 +116,31 @@ const ProjectDetail = () => {
     });
   };
 
-  const handleNavigation = (section) => {
-    navigate('/');
-    setTimeout(() => {
-      const targetSection = document.getElementById(section);
-      if (targetSection) {
-        targetSection.scrollIntoView({ behavior: 'smooth' });
-      }
-    }, 100);
-  };
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-[#030014] text-white pt-20 px-4 md:px-8 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500 mx-auto mb-4"></div>
+          <p className="text-lg">Loading project details...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!project) {
-    return <div>Project not found</div>;
+    return (
+      <div className="min-h-screen bg-[#030014] text-white pt-20 px-4 md:px-8 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-lg text-red-400">Project not found</p>
+          <button
+            onClick={handleBack}
+            className="mt-4 px-6 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors"
+          >
+            Back
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -105,16 +164,16 @@ const ProjectDetail = () => {
       </motion.button>
 
       <div className="max-w-7xl mx-auto relative z-10">
+        {/* New Back button */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           className="mb-8"
         >
-          <Link 
-            to="/" 
-            onClick={() => handleNavigation('portfolio')}
-            className="relative inline-flex items-center justify-center px-6 py-2 overflow-hidden font-medium transition duration-300 ease-out border-2 border-purple-500 rounded-lg shadow-md group"
+          <button 
+            onClick={handleBack}
+            className="group relative inline-flex items-center justify-center px-6 py-3 overflow-hidden font-medium transition duration-300 ease-out border-2 border-purple-500 rounded-lg shadow-md hover:shadow-purple-500/20"
           >
             <span className="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-gradient-to-r from-purple-500 to-blue-500 group-hover:translate-x-0 ease">
               <ArrowLeft className="w-5 h-5 mr-2" />
@@ -125,24 +184,26 @@ const ProjectDetail = () => {
               Back
             </span>
             <span className="relative invisible">Back</span>
-          </Link>
+          </button>
         </motion.div>
 
+        {/* Project Title */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="mb-16 pt-8 text-center"
+          className="mb-8 pt-8 text-center"
         >
           <h1 className="text-4xl md:text-5xl font-bold mb-8 pb-4 bg-gradient-to-r from-purple-400 to-blue-500 text-transparent bg-clip-text">
             {project.title}
           </h1>
         </motion.div>
 
+        {/* Project Image */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
+          transition={{ duration: 0.5, delay: 0.6 }}
           className="mb-12"
         >
           <div className="relative w-full max-w-xl mx-auto">
@@ -177,7 +238,9 @@ const ProjectDetail = () => {
                 <motion.img
                   src={project.image}
                   alt={project.title}
-                  className="w-full h-auto rounded-lg"
+                  className={`w-full h-auto rounded-lg ${
+                    project.title === "AidTrace" ? "object-contain max-h-[600px]" : ""
+                  }`}
                   initial={{ scale: 0.95, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ duration: 0.5, delay: 0.8 }}
@@ -727,6 +790,11 @@ const ProjectDetail = () => {
       </div>
     </div>
   );
+};
+
+ProjectDetail.propTypes = {
+  onBack: PropTypes.func.isRequired,
+  shouldScroll: PropTypes.bool.isRequired
 };
 
 export default ProjectDetail;

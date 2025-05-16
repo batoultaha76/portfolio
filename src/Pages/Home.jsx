@@ -154,7 +154,7 @@ const Home = () => {
                                     <span className="absolute -inset-1 bg-gradient-to-r from-[#6366f1] to-[#a855f7] blur-2xl opacity-30 rounded-lg"></span>
                                     <div className="relative space-y-6">
                                         <motion.h1 
-                                            className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight overflow-hidden"
+                                            className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight overflow-hidden mt-16 sm:mt-20"
                                             initial={{ opacity: 0, y: 20 }}
                                             animate={{ opacity: 1, y: 0 }}
                                             transition={{ duration: 0.7, delay: 0.2 }}
