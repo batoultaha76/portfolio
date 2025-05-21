@@ -6,7 +6,7 @@ export const projects = [
     image: "/assets/mockup1.jpg",
     category: "UI/UX Design",
     technologies: ["Figma", "UX Research", "Adobe Illustrator", "Adobe Photoshop", "Material Design", "Human Interface Guidelines", "iOS", "Android"],
-    liveDemo: "https://www.figma.com/design/pspEl5GtDZUmyBG3P97cmm/AidTraceApp1?node-id=52-924&t=fhKFuyuiK7QJSBUe-1",
+    liveDemo: "https://www.figma.com/proto/pspEl5GtDZUmyBG3P97cmm/AidTraceApp1?page-id=205%3A297&node-id=226-2200&viewport=262%2C117%2C0.06&t=4qK0eyIS32OR5euB-8&scaling=scale-down&content-scaling=fixed&starting-point-node-id=230%3A3106&hide-ui=1",
     caseStudy: "#",
     details: {
       overview: "AidTrace is a mobile app designed to empower beneficiaries of humanitarian aid by allowing them to track aid, provide anonymous feedback, and request urgent help. It also enables NGOs to communicate effectively and monitor service delivery.",

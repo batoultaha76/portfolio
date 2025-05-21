@@ -715,10 +715,11 @@ const ProjectDetail = () => {
            project.title !== "Personal Branding Logo" && 
            project.title !== "Skin Routine Infographic" &&
            project.title !== "Smart Wealth by NBK" &&
-           project.title !== "Designing Web Page" && (
+           project.title !== "Designing Web Page" &&
+           project.title !== "AidTrace" && (
             <a
               href={project.title === "AidTrace"
-                ? "https://www.figma.com/design/pspEl5GtDZUmyBG3P97cmm/AidTraceApp1?node-id=52-924&t=fhKFuyuiK7QJSBUe-1"
+                ? "https://www.figma.com/proto/pspEl5GtDZUmyBG3P97cmm/AidTraceApp1?page-id=205%3A297&node-id=226-2200&viewport=262%2C117%2C0.06&t=4qK0eyIS32OR5euB-8&scaling=scale-down&content-scaling=fixed&starting-point-node-id=230%3A3106&hide-ui=1"
                 : "https://www.figma.com/design/2j6GDWePrzrXhwGHkEiz58/Untitled?node-id=0-1&t=rSnplhHLC5afw3Hs-1"
               }
               target="_blank"
@@ -747,8 +748,12 @@ const ProjectDetail = () => {
                 ? "/assets/WebPageDesign.pdf"
                 : project.title === "Skin Routine Infographic"
                 ? "/assets/skinRoutineInfographic.pdf"
+                : project.title === "AidTrace"
+                ? "/assets/AidTrace_CaseStudy.pdf"
                 : "/assets/NBKCaseStudy.pdf"
             }
+            target={project.title === "AidTrace" ? "_blank" : undefined}
+            rel={project.title === "AidTrace" ? "noopener noreferrer" : undefined}
             download={
               project.title === "Emirates Flight Search" 
                 ? "EmiratesCaseStudy.pdf" 
@@ -758,30 +763,38 @@ const ProjectDetail = () => {
                 ? "WebPageDesign.pdf"
                 : project.title === "Skin Routine Infographic"
                 ? "skinRoutineInfographic.pdf"
+                : project.title === "AidTrace"
+                ? undefined
                 : "NBKCaseStudy.pdf"
             }
             className="relative inline-flex items-center justify-center px-8 py-3 overflow-hidden font-medium transition duration-300 ease-out border-2 border-blue-500 rounded-lg shadow-md group"
           >
             <span className="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-gradient-to-r from-blue-500 to-purple-500 group-hover:translate-x-0 ease">
               <Star className="w-5 h-5 mr-2" />
-              {project.title === "Personal Branding Logo" || 
-               project.title === "Designing Web Page" || 
-               project.title === "Skin Routine Infographic"
+              {project.title === "AidTrace"
+                ? "View Full Case Study"
+                : project.title === "Personal Branding Logo" || 
+                  project.title === "Designing Web Page" || 
+                  project.title === "Skin Routine Infographic"
                 ? "Download PDF" 
                 : "Download Full Case Study (PDF)"}
             </span>
             <span className="absolute flex items-center justify-center w-full h-full text-blue-500 transition-all duration-300 transform group-hover:translate-x-full ease">
               <Star className="w-5 h-5 mr-2" />
-              {project.title === "Personal Branding Logo" || 
-               project.title === "Designing Web Page" || 
-               project.title === "Skin Routine Infographic"
+              {project.title === "AidTrace"
+                ? "View Full Case Study"
+                : project.title === "Personal Branding Logo" || 
+                  project.title === "Designing Web Page" || 
+                  project.title === "Skin Routine Infographic"
                 ? "Download PDF" 
                 : "Download Full Case Study (PDF)"}
             </span>
             <span className="relative invisible">
-              {project.title === "Personal Branding Logo" || 
-               project.title === "Designing Web Page" || 
-               project.title === "Skin Routine Infographic"
+              {project.title === "AidTrace"
+                ? "View Full Case Study"
+                : project.title === "Personal Branding Logo" || 
+                  project.title === "Designing Web Page" || 
+                  project.title === "Skin Routine Infographic"
                 ? "Download PDF" 
                 : "Download Full Case Study (PDF)"}
             </span>

@@ -183,7 +183,7 @@ const AboutPage = () => {
           </div>
 
           <div className="flex flex-col sm:flex-row items-center justify-start gap-4 w-full max-w-md mt-8">
-            <a href="/assets/NewCV copy.pdf" download="Batool_CV.pdf" className="w-full sm:w-auto">
+            <a href="/assets/NewCV copy.pdf" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
               <motion.button 
                 data-aos="fade-up"
                 data-aos-duration="800"
@@ -197,7 +197,7 @@ const AboutPage = () => {
                 >
                   <FileText className="w-5 h-5" />
                 </motion.div>
-                <span>Download CV</span>
+                <span>View CV</span>
               </motion.button>
             </a>
             <a href="#portfolio" className="w-full sm:w-auto">
